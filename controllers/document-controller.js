@@ -12,7 +12,7 @@ class DocumentController {
 
             const sendForCAPI = {
                 data: [],
-                test_event_code: 'TEST5266',
+                test_event_code: 'TEST92150',
             };
 
             sendForCAPI.data.push(info);
@@ -31,8 +31,8 @@ class DocumentController {
                 console.log('Успешный ответ от сервера');
                 res.status(200).json({status: 'Ok'})
             })
-            .catch(() => {
-                console.log('Ошибка запроса');
+            .catch((err) => {
+                console.log('Ошибка запроса:', err);
                 res.status(500).json({status: 'Err'})
             });
 
