@@ -21,7 +21,7 @@ class DocumentController {
             const ID_PIXEL = '1096596584745009';
             const URL = `https://graph.facebook.com/v19.0/${ID_PIXEL}/events`;
 
-            axios.post(URL, ыendForCAPI, {
+            axios.post(URL, sendForCAPI, {
                 params: {access_token: PIXEL_TOKEN},
                 headers: {
                     'Content-Type': 'application/json'
