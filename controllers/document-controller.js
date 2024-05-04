@@ -32,12 +32,12 @@ class DocumentController {
                 res.status(200).json({status: 'Ok'})
             })
             .catch((err) => {
-                console.log('Ошибка запроса:', err);
+                console.log('Ошибка запроса:', err.message);
                 res.status(500).json({status: 'Err'})
             });
 
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
             res.status(500).json({status: 'Err'})
         }
     }
