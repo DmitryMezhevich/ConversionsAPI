@@ -7,6 +7,7 @@ class DocumentController {
     async downloadFile(req, res, next) {
         try {
             req.body.headers = req.headers;
+            req.body.userAgent = req.useragent;
 
             const info = new CAPIModel(req.body);
 
@@ -16,6 +17,8 @@ class DocumentController {
             };
 
             sendForCAPI.data.push(info);
+
+            console.log(info.user_data.client_user_agent);
 
             const PIXEL_TOKEN = 'EAAb9l8mZCJDYBOZCnWv6UrNEQIAjp9GH4tAiaIrG1ZAdXD0PWe8hGP3Y9xgUfFJZC57pzZCqWjoWxmHbJZCo6L1CRfMn8bcfIsOnSTYqC3ngElKveTZAuZAhmH956VGyBdZA8DoUKskVV4okpN4B2RBPCFcYoio0B1lWyYPY7m2p6xeHPHITZClRIz1I3jyx23ITrONgZDZD';
             const ID_PIXEL = '1096596584745009';

@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 module.exports = class CAPIModel {
     event_name;
     event_time;
@@ -8,13 +10,13 @@ module.exports = class CAPIModel {
 
     constructor(module) {
         this.event_name = module.event_name
-        this.event_time = new Date().getTime();
+        this.event_time = moment().tz('Etc/GMT+3').unix();
         this.action_source = module.action_source;
         this.event_source_url = module.event_source_url;
         this.event_id = module.event_id;
 
         const ip = module.headers['x-forwarded-for']?.split(',')[0].trim();
-        const userAgent = module.headers['user-agent'];
+        const userAgent = module.userAgent;
 
         this.user_data = {
             client_ip_address: ip,
