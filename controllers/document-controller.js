@@ -21,7 +21,7 @@ class DocumentController {
             let current_timestamp = moment().tz('Etc/GMT+3').unix();
 
             const userData = (new UserData())
-                .setClientIpAddress(req.connection.remoteAddress)
+                .setClientIpAddress(req.headers['x-forwarded-for']?.split(',')[0].trim())
                 .setClientUserAgent(req.headers['user-agent'])
                 .setFbp(req.body.fbp)
                 .setFbc(req.body.fbc);
