@@ -37,7 +37,7 @@ class DocumentController {
             const eventsData = [serverEvent];
             const eventRequest = (new EventRequest(access_token, pixel_id))
                             .setEvents(eventsData)
-                            .setTestEventCode('TEST65126');
+                            .setTestEventCode('TEST97865');
 
             eventRequest.execute().then(
             response => {
