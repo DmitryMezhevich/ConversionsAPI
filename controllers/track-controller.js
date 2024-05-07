@@ -35,7 +35,7 @@ class TarckController {
             const eventsData = [serverEvent];
             const eventRequest = (new EventRequest(access_token, pixel_id))
                             .setEvents(eventsData)
-                            .setTestEventCode('TEST97865');
+                            .setTestEventCode('TEST65706');
 
             eventRequest.execute().then(
             response => {
@@ -114,7 +114,7 @@ class TarckController {
             const eventsData = [serverEvent];
             const eventRequest = (new EventRequest(access_token, pixel_id))
                             .setEvents(eventsData)
-                            .setTestEventCode('TEST97865');
+                            .setTestEventCode('TEST65706');
 
             eventRequest.execute().then(
             response => {
