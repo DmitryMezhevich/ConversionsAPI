@@ -1,0 +1,34 @@
+<!-- 
+    Импортируем axios
+    Импортируем uuid
+    Запрещаем автоотправку с формы
+    Парсим URL, сразу указываем источник рекламы
+ -->
+
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+<script type="module">
+    import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+    window.getUUIDv4 = function () {
+        return uuidv4();
+    };
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#allrecords').data('fb-event', 'nosend');
+    });
+</script>
+
+<script>
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+
+    const sourceFB = params.has('fbclid');
+    const sourceTT = params.has('ttclid') || params.has('tt_test_id');
+    const utmSource = params.has('utm_source')
+        ? params.get('utm_source')
+        : 'отсутствует';
+    const originlURL = `${url.hostname}${url.pathname}`;
+</script>

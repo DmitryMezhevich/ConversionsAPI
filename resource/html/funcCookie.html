@@ -1,0 +1,28 @@
+<!--
+    Функции для работы с Cookie
+-->
+
+<script>
+    function getCookie(name) {
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookies = decodedCookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+                return cookie.substring(name.length + 1);
+            }
+        }
+        return null;
+    }
+
+    function setCookie(name) {
+        var currentDate = new Date();
+        var expirationDate = new Date(
+            currentDate.getTime() + 60 * 24 * 60 * 60 * 1000
+        );
+        var expires = 'expires=' + expirationDate.toUTCString();
+        const _eventID = window.getUUIDv4();
+        document.cookie = `${name}=${_eventID}; ${expires}; path=/`;
+        return _eventID;
+    }
+</script>

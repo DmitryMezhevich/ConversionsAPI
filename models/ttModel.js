@@ -1,34 +1,37 @@
 const moment = require('moment-timezone');
+const sha256 = require('js-sha256');
 
 module.exports = class ttModel {
-    event_source; // Источник: 'web' - вебсайт
-    event_source_id; // ID Pixel: 'COU94SBC77U8DR5JQBHG'
-    data = [
-        {
-            event: 'PlaceAnOrder', // Имя события string
-            event_time, // Время события integer
-            event_id, // ID события для дедупликации string
-            user: {
-                // Информация о клиенте
-                ttclid, // ID клика, вытасквается из куки ttclid string
-                phone, // Номер клиента string SHA256 Normalized to E.164 format: "+12133734253"
-                external_id, // Внешний ID клиента string SHA256, надо почитать и понять откуда его стоит брать
-                ttp, // Cookie ID, вытасквается из куки _ttp string, это куки домена сайта
-                ip, // IP клиента
-                user_agent, // Агент клиента
-            },
-            properties: {
-                // Информация о товаре, заказе и дополнительная информация
-                currency, // Валюта 'USD'
-                value, // Стоимость заказа или проданных товаров
-            },
-            page: {
-                // Информация о веб-странице
-                url, // location.href
-                referrer, // document.referrer
-            },
-        },
-    ];
+    event_source = 'web';
+    event_source_id;
+    data;
 
-    constructor(module) {}
+    constructor(module) {
+        this.event_source_id = module.ttPixelID;
+        this.data = [
+            {
+                event: module.eventName,
+                event_time: moment().tz('Etc/GMT+3').unix(),
+                event_id: module.eventID,
+                user: {
+                    ttclid: module.ttclid,
+                    external_id: module.eventID,
+                    ttp: module.ttp,
+                    ip: module.headers['x-forwarded-for']?.split(',')[0].trim(),
+                    user_agent: module.headers['user-agent'],
+                },
+                page: {
+                    url: module.eventSourceUrl,
+                    referrer: module.eventSourceUrl,
+                }
+            }
+        ];
+
+        if (module.phone) {
+            this.data[0].user.phone = sha256(module.phone);
+        }
+        if (module.testEventCode) {
+            this.test_event_code = module.testEventCode;
+        }
+    }
 };

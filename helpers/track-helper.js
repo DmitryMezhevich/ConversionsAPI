@@ -8,7 +8,7 @@ const UserData = bizSdk.UserData;
 const ServerEvent = bizSdk.ServerEvent;
 
 class TrackHelper {
-    createFBEvent(headers, model, accessToken, pixelID, testCode = null) {
+    createFBEvent(headers, model, accessToken) {
         bizSdk.FacebookAdsApi.init(accessToken);
         let currentTimestamp = moment().tz('Etc/GMT+3').unix();
 
@@ -18,7 +18,8 @@ class TrackHelper {
             )
             .setClientUserAgent(headers['user-agent'])
             .setFbp(model.fbp)
-            .setFbc(model.fbc);
+            .setFbc(model.fbc)
+            .setExternalId(model.eventID);
 
         const serverEvent = new ServerEvent()
             .setEventName(model.eventName)
@@ -35,14 +36,12 @@ class TrackHelper {
 
             serverEvent.setCustomData(customData);
 
-            if (
-                model.phone !== null &&
-                this.formatPhoneNumber(model.phone) !== null
-            ) {
-                userData.setPhone(this.formatPhoneNumber(model.phone));
+            const _phone = this.#formatPhoneNumber(model.phone);
+            if (_phone) {
+                userData.setPhone(_phone);
             }
 
-            if (model.name !== null && model.name.length > 0) {
+            if (!model.name && model.name.length > 0) {
                 userData.setFirstName(
                     cyrillicToTranslit().transform(model.name)
                 );
@@ -50,18 +49,20 @@ class TrackHelper {
         }
 
         const eventsData = [serverEvent];
-        const eventRequest = new EventRequest(accessToken, pixelID).setEvents(
+        const eventRequest = new EventRequest(accessToken, model.fbPixelID).setEvents(
             eventsData
         );
 
-        if (testCode) {
-            eventRequest.setTestEventCode(testCode);
+        if (model.testEventCode) {
+            eventRequest.setTestEventCode(model.testEventCode);
         }
 
         return eventRequest;
     }
 
-    formatPhoneNumber(phoneNumber) {
+    #formatPhoneNumber(phoneNumber) {
+        if (!phoneNumber) { return null }
+
         phoneNumber = phoneNumber.replace(/\D/g, '');
 
         if (phoneNumber.length >= 9) {

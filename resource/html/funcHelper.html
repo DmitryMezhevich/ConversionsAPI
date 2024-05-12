@@ -1,0 +1,39 @@
+<!--
+    Функции помощники:
+        Отправка ивентов на сервер
+        Функция для форматирования номера клиента под ивенты TikTok
+-->
+
+<script>
+    function sendEvent(url, data) {
+        axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
+    function formatPhoneNumber(phoneNumber) {
+        if (!phoneNumber) { return null }
+
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+
+        if (phoneNumber.length >= 9) {
+            let firstChars = phoneNumber.slice(0, -7);
+            const lastSevnChars = phoneNumber.slice(-7);
+
+            if (firstChars.includes('25')) {
+                firstChars = '+37525';
+            }
+            if (firstChars.includes('33')) {
+                firstChars = '+37533';
+            } else if (firstChars.includes('44')) {
+                firstChars = '+37544';
+            } else firstChars = '+37529';
+
+            return `${firstChars}${lastSevnChars}`;
+        } else {
+            return null;
+        }
+    }
+</script>

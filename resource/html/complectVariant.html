@@ -1,0 +1,200 @@
+<!--
+    Код для выбора варианта комплекта товара
+-->
+
+<style>
+    .complect {
+        width: 300px;
+        margin: 10px auto 0;
+    }
+
+    .complect-variants {
+        margin-top: 20px;
+    }
+
+    .complect-variant {
+        margin-top: 11px;
+        cursor: pointer;
+    }
+
+    .active .complect-item {
+        border: 2px solid #C329FA;
+    }
+
+    .complect-item {
+        background: #F2F2F2;
+        border-radius: 25px;
+        height: 30px;
+        padding: 15px 20px;
+        border: 2px solid #F2F2F2;
+        align-items: center;
+    }
+
+    .complect-caption {
+        border-radius: 10px;
+        background: #FFEBB7;
+        font-size: 13px;
+        font-weight: 400;
+        display: inline-block;
+        line-height: 120%;
+        padding: 5px 10px;
+        margin-bottom: 3px;
+    }
+
+    .green {
+        background:#CEFFB8;
+    }
+
+    .complect-info {
+        position: relative;
+    }
+
+    .complect-info-count {
+        display: flex;
+        align-items: center;
+    }
+
+    .complect-info-count-circle {
+        width: 16px;
+        height: 16px;
+        border: 2px solid;
+        border-radius: 50%;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .active .complect-info-count-circle {
+        background: #C329FA;
+    }
+
+    .complect-info-count-data {
+        margin-top: 3px;
+    }
+
+    .complect-info-count-data-header {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 120%;
+        color: #323232;
+        margin-top: -10px;
+    }
+
+    .complect-info-count-data-discount {
+        font-size: 11px;
+        font-weight: 400;
+        color: #8A8A8A;
+    }
+
+    .complect-info-price {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .complect-info-price-newprice {
+        font-size: 18px;
+        font-weight: 700;
+        color: #323232;
+        line-height: 120%;
+        text-align: right;
+    }
+
+    .complect-info-price-oldprice {
+        text-decoration: line-through;
+        font-size: 11px;
+        font-weight: 400;
+        color: #8A8A8A;
+        line-height: 120%;
+        margin-left: 10px;
+    }
+</style>
+
+
+<div class="complect" id="form">
+    <div class="complect-variants">
+
+        <div class="complect-variant active">
+            <div class="complect-caption"></div>
+            <div class="complect-item">
+                <div class="complect-info">
+                    <div class="complect-info-count">
+                        <div class="complect-info-count-circle"></div>
+                        <div class="complect-info-count-data">
+                            <div class="complect-info-count-data-header"></div>
+                            <div class="complect-info-count-data-discount"></div>
+                        </div>
+                    </div>
+                    <div class="complect-info-price">
+                        <div class="complect-info-price-newprice"></div>
+                        <div class="complect-info-price-oldprice"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="complect-variant">
+            <div class="complect-caption green"></div>
+            <div class="complect-item">
+                <div class="complect-info">
+                    <div class="complect-info-count">
+                        <div class="complect-info-count-circle"></div>
+                        <div class="complect-info-count-data">
+                            <div class="complect-info-count-data-header"></div>
+                            <div class="complect-info-count-data-discount"></div>
+                        </div>
+                    </div>
+                    <div class="complect-info-price">
+                        <div class="complect-info-price-newprice"></div>
+                        <div class="complect-info-price-oldprice"></div>
+                    </div>
+                </div>
+            </div>
+        </div>	
+
+    </div>
+</div>
+
+<script>
+    const complectVariants = document.querySelectorAll('.complect-variant');
+    const complectCaption = document.querySelectorAll('.complect-caption');
+    const complectInfoCountDataHeader = document.querySelectorAll('.complect-info-count-data-header');
+    const complectInfoCountDataDiscount = document.querySelectorAll('.complect-info-count-data-discount');
+    const complectInfoPriceNewprice = document.querySelectorAll('.complect-info-price-newprice');
+    const complectInfoPriceOldprice = document.querySelectorAll('.complect-info-price-oldprice');
+
+    complectVariants.forEach((variant, index) => {
+        variant.setAttribute('pack', variants[index].pack);
+        variant.setAttribute('price', variants[index].salePrice);
+    });
+
+    complectCaption.forEach((variant, index) => {
+        variant.textContent = variants[index].headers;
+    });
+
+    complectInfoCountDataHeader.forEach((variant, index) => {
+        variant.textContent = variants[index].description;
+    });
+
+    complectInfoCountDataDiscount.forEach((variant, index) => {
+        variant.textContent = variants[index].sale;
+    });
+    
+    complectInfoPriceNewprice.forEach((variant, index) => {
+        variant.textContent = variants[index].salePrice;
+    });
+    
+    complectInfoPriceOldprice.forEach((variant, index) => {
+        variant.textContent = variants[index].price;
+    });
+
+    complectVariants.forEach(function(complectVariant) {
+        complectVariant.addEventListener('click', function() {
+            complectVariants.forEach(function(element) {
+            element.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+</script>
