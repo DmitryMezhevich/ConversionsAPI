@@ -23,8 +23,8 @@ module.exports = class ttModel {
                 page: {
                     url: module.eventSourceUrl,
                     referrer: module.eventSourceUrl,
-                }
-            }
+                },
+            },
         ];
 
         if (module.phone) {

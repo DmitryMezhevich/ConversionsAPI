@@ -17,7 +17,9 @@
     }
 
     function formatPhoneNumber(phoneNumber) {
-        if (!phoneNumber) { return null }
+        if (!phoneNumber) {
+            return null;
+        }
 
         phoneNumber = phoneNumber.replace(/\D/g, '');
 
@@ -41,7 +43,9 @@
     }
 
     function sendOrder(loadingPopUp = false) {
-        if (loadingPopUp) { openPopUp('loading') }
+        if (loadingPopUp) {
+            openPopUp('loading');
+        }
 
         axios
             .post(URI_API, {
@@ -71,14 +75,14 @@
         linkToPopup.setAttribute('href', `${window.location.hash}#${name}`);
         linkToPopup.style.display = 'none';
         document.querySelector('.r').appendChild(linkToPopup);
-    
-        t_onReady (function () {
+
+        t_onReady(function () {
             t_onFuncLoad('t_popup__showPopup', function () {
                 linkToPopup.click();
             });
         });
     }
-    
+
     function closePopUp() {
         const popUpOpn = document.querySelector('.t-popup_show');
         console.log(popUpOpn);

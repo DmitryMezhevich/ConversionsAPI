@@ -49,9 +49,10 @@ class TrackHelper {
         }
 
         const eventsData = [serverEvent];
-        const eventRequest = new EventRequest(accessToken, model.fbPixelID).setEvents(
-            eventsData
-        );
+        const eventRequest = new EventRequest(
+            accessToken,
+            model.fbPixelID
+        ).setEvents(eventsData);
 
         if (model.testEventCode) {
             eventRequest.setTestEventCode(model.testEventCode);
@@ -61,7 +62,9 @@ class TrackHelper {
     }
 
     #formatPhoneNumber(phoneNumber) {
-        if (!phoneNumber) { return null }
+        if (!phoneNumber) {
+            return null;
+        }
 
         phoneNumber = phoneNumber.replace(/\D/g, '');
 

@@ -38,13 +38,16 @@ class TarckController {
 
             const ttModel = new TTModel(model);
 
-            await axios
-                .post('https://business-api.tiktok.com/open_api/v1.3/event/track/', ttModel, {
+            await axios.post(
+                'https://business-api.tiktok.com/open_api/v1.3/event/track/',
+                ttModel,
+                {
                     headers: {
                         'Access-Token': accessToken,
                         'Content-Type': 'application/json',
                     },
-                })
+                }
+            );
 
             res.status(200).json({ status: 'Ok' });
         } catch (err) {
@@ -56,9 +59,15 @@ class TarckController {
     async addDataPixel(req, res, next) {
         try {
             if (req.body.typePixel === 'Facebook') {
-                await sqlRequest.addAccessTokenFB(req.body.pixelID, req.body.accessToken);
+                await sqlRequest.addAccessTokenFB(
+                    req.body.pixelID,
+                    req.body.accessToken
+                );
             } else if (req.body.typePixel === 'TikTok') {
-                await sqlRequest.addAccessTokenTT(req.body.pixelID, req.body.accessToken);
+                await sqlRequest.addAccessTokenTT(
+                    req.body.pixelID,
+                    req.body.accessToken
+                );
             }
 
             res.status(200).json({ status: 'Ok' });
@@ -75,7 +84,10 @@ class TarckController {
     // и отправляет ответ одним файлом клиенту
     async resource(req, res, next) {
         try {
-            const content = await fs.readFile(`${__dirname}/../resource/eventJS.js`, 'utf-8');
+            const content = await fs.readFile(
+                `${__dirname}/../resource/eventJS.js`,
+                'utf-8'
+            );
             res.writeHead(200, { 'Content-Type': 'application/javascript' });
             res.end(content, 'utf-8');
         } catch (err) {

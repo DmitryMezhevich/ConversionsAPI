@@ -32,14 +32,14 @@
 
     function sendEventToTT(phone = null) {
         const eventName = phone ? 'SubmitForm' : 'Pageview';
-        const identify = {external_id: eventID};
+        const identify = { external_id: eventID };
         const _phone = formatPhoneNumber(phone);
         if (_phone) {
             identify.phone_number = _phone;
         }
 
-        ttq.identify(identify)        
-        ttq.track(eventName, {}, {event_id: eventID});
+        ttq.identify(identify);
+        ttq.track(eventName, {}, { event_id: eventID });
 
         const eventModule = {
             ttPixelID: ttPixelID,
@@ -57,6 +57,4 @@
             eventModule
         );
     }
-
-    
 </script>

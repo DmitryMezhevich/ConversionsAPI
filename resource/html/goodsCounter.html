@@ -1,10 +1,10 @@
 <style>
     .act {
-    text-align: center;
-    padding: 5px;
-    font-size: 16px;
-    line-height: 1.6;
-}
+        text-align: center;
+        padding: 5px;
+        font-size: 16px;
+        line-height: 1.6;
+    }
 
     .act > .by {
         color: #e62e04;
@@ -26,46 +26,45 @@
     }
 </style>
 
-    <div>
-        <div class="act">
-            Акция действует <br>
-            с <span class="by"></span> по <span class="to"></span> на всей <br>
-            территории Республики Беларусь
-        </div>
-
-        <div class="act">
-            Осталось <b class="lastpack">12</b>&nbsp;штук по акции
-        </div>
+<div>
+    <div class="act">
+        Акция действует <br />
+        с <span class="by"></span> по <span class="to"></span> на всей <br />
+        территории Республики Беларусь
     </div>
 
+    <div class="act">
+        Осталось <b class="lastpack">12</b>&nbsp;штук по акции
+    </div>
+</div>
 
 <script>
     (function setDate() {
         let d = new Date();
         let p = new Date(d.getTime() - 2 * 86400000);
         let monthA = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря',
         ];
-        $(".by").html(p.getDate() + " " + monthA[p.getMonth()] + " ");
+        $('.by').html(p.getDate() + ' ' + monthA[p.getMonth()] + ' ');
         p = new Date(d.getTime() + 0 * 86400000);
-        $(".to").html(
-        p.getDate() +
-            " " +
-            monthA[p.getMonth()] +
-            " " +
-            p.getFullYear() +
-            " года"
+        $('.to').html(
+            p.getDate() +
+                ' ' +
+                monthA[p.getMonth()] +
+                ' ' +
+                p.getFullYear() +
+                ' года'
         );
     })();
 </script>
@@ -75,18 +74,18 @@
     function decreaseCount() {
         let lastPackElement = document.querySelector('.lastpack');
         let count = parseInt(lastPackElement.textContent);
-        
+
         // Проверяем, если число больше 2, то уменьшаем его на 1 и обновляем блок
         if (count > 2) {
             count--;
             lastPackElement.textContent = count;
-            document.cookie = "lastPackCount=" + count;
+            document.cookie = 'lastPackCount=' + count;
         }
     }
 
     // Функция для случайного уменьшения числа через случайное время от 5 до 25 секунд
     function randomDecrease() {
-        setTimeout(function() {
+        setTimeout(function () {
             decreaseCount();
             randomDecrease();
         }, Math.floor(Math.random() * 20000) + 5000); // От 5000 до 25000 миллисекунд
@@ -125,8 +124,8 @@
 
 <div>
     <div class="act">
-        Акция действует <br>
-        с <span class="by"></span> по <span class="to"></span> на всей <br>
+        Акция действует <br />
+        с <span class="by"></span> по <span class="to"></span> на всей <br />
         территории Республики Беларусь
     </div>
 </div>
@@ -136,34 +135,34 @@
         Осталось <b class="lastpack2">12</b>&nbsp;штук по акции
     </div>
 </div>
-    
+
 <script>
     (function setDate() {
         let d = new Date();
         let p = new Date(d.getTime() - 2 * 86400000);
         let monthA = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря',
         ];
-        $(".by").html(p.getDate() + " " + monthA[p.getMonth()] + " ");
+        $('.by').html(p.getDate() + ' ' + monthA[p.getMonth()] + ' ');
         p = new Date(d.getTime() + 0 * 86400000);
-        $(".to").html(
-        p.getDate() +
-            " " +
-            monthA[p.getMonth()] +
-            " " +
-            p.getFullYear() +
-            " года"
+        $('.to').html(
+            p.getDate() +
+                ' ' +
+                monthA[p.getMonth()] +
+                ' ' +
+                p.getFullYear() +
+                ' года'
         );
     })();
 </script>
@@ -172,7 +171,7 @@
     // Функция для уменьшения числа и записи его в блок
     function decreaseCount_() {
         let lastPackElement = document.querySelector('.lastpack2');
-        
+
         let cookies = document.cookie.split(';');
         let savedCount = null;
         for (let cookie of cookies) {
@@ -182,13 +181,13 @@
                 break;
             }
         }
-        
+
         lastPackElement.textContent = savedCount ? savedCount : 2;
     }
 
     // Функция для случайного уменьшения числа через случайное время от 5 до 25 секунд
     function randomDecrease_() {
-        setTimeout(function() {
+        setTimeout(function () {
             decreaseCount_();
             randomDecrease_();
         }, 2000); // От 5000 до 25000 миллисекунд

@@ -6,7 +6,7 @@
     // По завершению загрузки страницы формируем EventID и вызываем ивент PageView
     window.addEventListener('load', function (event) {
         // Добавляем действие на кнопку в popup при не удачном закезе
-        addListenerResendOrder()
+        addListenerResendOrder();
 
         eventID = eventID ? getCookie('_plEventID') : eventID;
         if (eventID === null) {
@@ -52,7 +52,11 @@
 
         // Формируем дополнительный параметр источника для лучшей читабельности
         // в сообщении telegram
-        const sourceDescription = sourceFB ? ' (Facebook)' : (sourceTT ? ' (TikTok)' : '');
+        const sourceDescription = sourceFB
+            ? ' (Facebook)'
+            : sourceTT
+            ? ' (TikTok)'
+            : '';
 
         // Формируем общий объект с данными заказа
         const data = {

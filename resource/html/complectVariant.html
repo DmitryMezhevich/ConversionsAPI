@@ -18,12 +18,12 @@
     }
 
     .active .complect-item {
-        border: 2px solid #C329FA;
+        border: 2px solid #c329fa;
         background: #faeaff;
     }
 
     .complect-item {
-        background: #F2F2F2;
+        background: #f2f2f2;
         border-radius: 25px;
         height: 30px;
         padding: 15px 20px;
@@ -33,7 +33,7 @@
 
     .complect-caption {
         border-radius: 10px;
-        background: #FFEBB7;
+        background: #ffebb7;
         font-size: 13px;
         font-weight: 400;
         display: inline-block;
@@ -43,7 +43,7 @@
     }
 
     .green {
-        background:#CEFFB8;
+        background: #ceffb8;
     }
 
     .complect-info {
@@ -65,7 +65,7 @@
     }
 
     .active .complect-info-count-circle {
-        background: #C329FA;
+        background: #c329fa;
     }
 
     .complect-info-count-data {
@@ -83,7 +83,7 @@
     .complect-info-count-data-discount {
         font-size: 11px;
         font-weight: 400;
-        color: #8A8A8A;
+        color: #8a8a8a;
     }
 
     .complect-info-price {
@@ -107,16 +107,14 @@
         text-decoration: line-through;
         font-size: 14px;
         font-weight: 400;
-        color: #8A8A8A;
+        color: #8a8a8a;
         line-height: 120%;
         margin-left: 10px;
     }
 </style>
 
-
 <div class="complect" id="form">
     <div class="complect-variants">
-
         <div class="complect-variant active">
             <div class="complect-caption"></div>
             <div class="complect-item">
@@ -125,7 +123,9 @@
                         <div class="complect-info-count-circle"></div>
                         <div class="complect-info-count-data">
                             <div class="complect-info-count-data-header"></div>
-                            <div class="complect-info-count-data-discount"></div>
+                            <div
+                                class="complect-info-count-data-discount"
+                            ></div>
                         </div>
                     </div>
                     <div class="complect-info-price">
@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="complect-variant">
             <div class="complect-caption green"></div>
             <div class="complect-item">
@@ -144,7 +144,9 @@
                         <div class="complect-info-count-circle"></div>
                         <div class="complect-info-count-data">
                             <div class="complect-info-count-data-header"></div>
-                            <div class="complect-info-count-data-discount"></div>
+                            <div
+                                class="complect-info-count-data-discount"
+                            ></div>
                         </div>
                     </div>
                     <div class="complect-info-price">
@@ -153,18 +155,25 @@
                     </div>
                 </div>
             </div>
-        </div>	
-
+        </div>
     </div>
 </div>
 
 <script>
     const complectVariants = document.querySelectorAll('.complect-variant');
     const complectCaption = document.querySelectorAll('.complect-caption');
-    const complectInfoCountDataHeader = document.querySelectorAll('.complect-info-count-data-header');
-    const complectInfoCountDataDiscount = document.querySelectorAll('.complect-info-count-data-discount');
-    const complectInfoPriceNewprice = document.querySelectorAll('.complect-info-price-newprice');
-    const complectInfoPriceOldprice = document.querySelectorAll('.complect-info-price-oldprice');
+    const complectInfoCountDataHeader = document.querySelectorAll(
+        '.complect-info-count-data-header'
+    );
+    const complectInfoCountDataDiscount = document.querySelectorAll(
+        '.complect-info-count-data-discount'
+    );
+    const complectInfoPriceNewprice = document.querySelectorAll(
+        '.complect-info-price-newprice'
+    );
+    const complectInfoPriceOldprice = document.querySelectorAll(
+        '.complect-info-price-oldprice'
+    );
 
     complectVariants.forEach((variant, index) => {
         variant.setAttribute('pack', variants[index].pack);
@@ -182,19 +191,19 @@
     complectInfoCountDataDiscount.forEach((variant, index) => {
         variant.textContent = variants[index].sale;
     });
-    
+
     complectInfoPriceNewprice.forEach((variant, index) => {
         variant.textContent = `${variants[index].salePrice} BYN`;
     });
-    
+
     complectInfoPriceOldprice.forEach((variant, index) => {
         variant.textContent = `${variants[index].price} BYN`;
     });
 
-    complectVariants.forEach(function(complectVariant) {
-        complectVariant.addEventListener('click', function() {
-            complectVariants.forEach(function(element) {
-            element.classList.remove('active');
+    complectVariants.forEach(function (complectVariant) {
+        complectVariant.addEventListener('click', function () {
+            complectVariants.forEach(function (element) {
+                element.classList.remove('active');
             });
             this.classList.add('active');
         });
