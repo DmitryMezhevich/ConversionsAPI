@@ -2,6 +2,9 @@
     Функции помощники:
         Отправка ивентов на сервер
         Функция для форматирования номера клиента под ивенты TikTok
+        Отправка заказа в telegram
+        Попытка отправки заказа еще раз при не удачном первом разе
+        Открыть и закрыть popUp
 -->
 
 <script>
@@ -35,5 +38,50 @@
         } else {
             return null;
         }
+    }
+
+    function sendOrder(loadingPopUp = false) {
+        if (loadingPopUp) { openPopUp('loading') }
+
+        axios
+            .post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'html',
+                text: message,
+            })
+            .then(() => {
+                closePopUp();
+                window.location.href = srcThenksPage;
+            })
+            .catch(() => {
+                closePopUp();
+                openPopUp('error');
+            });
+    }
+
+    function addListenerResendOrder() {
+        const button = document.querySelector('#rec747446791 button');
+        button.addEventListener('click', function () {
+            sendOrder(true);
+        });
+    }
+
+    function openPopUp(name) {
+        var linkToPopup = document.createElement('a');
+        linkToPopup.setAttribute('href', `${window.location.hash}#${name}`);
+        linkToPopup.style.display = 'none';
+        document.querySelector('.r').appendChild(linkToPopup);
+    
+        t_onReady (function () {
+            t_onFuncLoad('t_popup__showPopup', function () {
+                linkToPopup.click();
+            });
+        });
+    }
+    
+    function closePopUp() {
+        const popUpOpn = document.querySelector('.t-popup_show');
+        console.log(popUpOpn);
+        popUpOpn.click();
     }
 </script>

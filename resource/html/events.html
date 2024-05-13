@@ -5,9 +5,12 @@
 <script>
     // По завершению загрузки страницы формируем EventID и вызываем ивент PageView
     window.addEventListener('load', function (event) {
+        // Добавляем действие на кнопку в popup при не удачном закезе
+        addListenerResendOrder()
+
         eventID = eventID ? getCookie('_plEventID') : eventID;
         if (eventID === null) {
-            eventID = setCookie('_plEventID');
+            eventID = setCookieEventID();
         }
 
         if (sourceFB) {
@@ -22,6 +25,9 @@
     function t396_onSuccess(form) {
         // Достаем значения из формы
         if (!form) return;
+
+        // Открываем окно с ожиданием
+        openPopUp('loading');
 
         if (form instanceof jQuery) {
             form = form.get(0);
@@ -81,15 +87,6 @@
         message += `<b>Цена: ${data.price} руб.</b>\n`;
 
         // Отправка в telegram
-        axios
-            .post(URI_API, {
-                chat_id: CHAT_ID,
-                parse_mode: 'html',
-                text: message,
-            })
-            .then(() => {
-                window.location.href = srcThenksPage;
-            })
-            .catch(() => {});
+        sendOrder();
     }
 </script>

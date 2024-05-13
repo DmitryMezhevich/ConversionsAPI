@@ -15,14 +15,18 @@
         return null;
     }
 
-    function setCookie(name) {
+    function setCookieEventID() {
+        const _eventID = window.getUUIDv4();
+        setCookie('_eventID', _eventID, 60 * 24 * 60);
+        return _eventID;
+    }
+
+    function setCookie(name, value, timeIntervalMinute) {
         var currentDate = new Date();
         var expirationDate = new Date(
-            currentDate.getTime() + 60 * 24 * 60 * 60 * 1000
+            currentDate.getTime() + timeIntervalMinute * 60 * 1000
         );
         var expires = 'expires=' + expirationDate.toUTCString();
-        const _eventID = window.getUUIDv4();
-        document.cookie = `${name}=${_eventID}; ${expires}; path=/`;
-        return _eventID;
+        document.cookie = `${name}=${value}; ${expires}; path=/`;
     }
 </script>

@@ -53,6 +53,21 @@ class TarckController {
         }
     }
 
+    async addDataPixel(req, res, next) {
+        try {
+            if (req.body.typePixel === 'Facebook') {
+                await sqlRequest.addAccessTokenFB(req.body.pixelID, req.body.accessToken);
+            } else if (req.body.typePixel === 'TikTok') {
+                await sqlRequest.addAccessTokenTT(req.body.pixelID, req.body.accessToken);
+            }
+
+            res.status(200).json({ status: 'Ok' });
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).json({ err: err.message });
+        }
+    }
+
     // TO-DO Может когда-нибудь доделаю загрузку скриптов с сервера на клиент
     // Идея в следующем: в папке resource разместить несколько файлов js,
     // которые надо брать из файла resource.html в этой же папке.
@@ -63,6 +78,17 @@ class TarckController {
             const content = await fs.readFile(`${__dirname}/../resource/eventJS.js`, 'utf-8');
             res.writeHead(200, { 'Content-Type': 'application/javascript' });
             res.end(content, 'utf-8');
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).json({ err: err.message });
+        }
+    }
+
+    async test(req, res, next) {
+        try {
+            setTimeout(() => {
+                res.status(500).json({ err: err.message });
+            }, 3000);
         } catch (err) {
             console.log(err.message);
             res.status(500).json({ err: err.message });

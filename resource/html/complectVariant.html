@@ -19,6 +19,7 @@
 
     .active .complect-item {
         border: 2px solid #C329FA;
+        background: #faeaff;
     }
 
     .complect-item {
@@ -26,7 +27,7 @@
         border-radius: 25px;
         height: 30px;
         padding: 15px 20px;
-        border: 2px solid #F2F2F2;
+        border: 2px solid #000000;
         align-items: center;
     }
 
@@ -89,7 +90,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        display: flex;
+        display: inline-table;
         align-items: center;
     }
 
@@ -99,11 +100,12 @@
         color: #323232;
         line-height: 120%;
         text-align: right;
+        margin-top: -7px;
     }
 
     .complect-info-price-oldprice {
         text-decoration: line-through;
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 400;
         color: #8A8A8A;
         line-height: 120%;
@@ -182,11 +184,11 @@
     });
     
     complectInfoPriceNewprice.forEach((variant, index) => {
-        variant.textContent = variants[index].salePrice;
+        variant.textContent = `${variants[index].salePrice} BYN`;
     });
     
     complectInfoPriceOldprice.forEach((variant, index) => {
-        variant.textContent = variants[index].price;
+        variant.textContent = `${variants[index].price} BYN`;
     });
 
     complectVariants.forEach(function(complectVariant) {
