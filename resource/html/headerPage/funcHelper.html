@@ -1,0 +1,165 @@
+<!--
+    funcHelper.html
+    
+    Функции помощники:
+        Отправка ивентов на сервер
+        Функция для форматирования номера клиента под ивенты TikTok
+        Отправка заказа в telegram
+        Попытка отправки заказа еще раз при не удачном первом разе
+        Открыть и закрыть popUp
+-->
+
+<script>
+    // Отправка Event в Events API
+    function sendEvent(url, data) {
+        axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
+    // Форматирование номера для TikTok Pixel
+    function formatPhoneNumber(phoneNumber) {
+        if (!phoneNumber) {
+            return null;
+        }
+
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+
+        if (phoneNumber.length >= 9) {
+            let firstChars = phoneNumber.slice(0, -7);
+            const lastSevnChars = phoneNumber.slice(-7);
+
+            if (firstChars.includes('25')) {
+                firstChars = '+37525';
+            }
+            if (firstChars.includes('33')) {
+                firstChars = '+37533';
+            } else if (firstChars.includes('44')) {
+                firstChars = '+37544';
+            } else firstChars = '+37529';
+
+            return `${firstChars}${lastSevnChars}`;
+        } else {
+            return null;
+        }
+    }
+
+    // Отправка сообщения о заказе в telegram
+    function sendOrder(loadingPopUp = false, message = null, callback = null) {
+        if (loadingPopUp) {
+            closePopUp();
+            openPopUp('loading');
+        }
+
+        const _message = message ? message : getLocalStorege('_clientMessage');
+        
+        axios
+            .post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'html',
+                text: _message,
+            })
+            .then(() => {
+                if (callback) { callback() }
+                closePopUp();
+                window.location.href = srcThenksPage;
+            })
+            .catch(() => {
+                closePopUp();
+                openPopUp('error');
+            });
+    }
+
+    // Ставим обработчик на клик кнопки popup (если отправка сообщения с заказом прошла не успешно) для повторной попытке отправки
+    // Чтобы найти эту кнопку, нужно указывать, в каком конкретно блоке искать (указываем id, пример: #rec747752787)
+    function addListenerResendOrder() {
+        const button = document.querySelector('#rec748246272 [data-elem-type="button"]');
+        button.addEventListener('click', function () {
+            sendOrder(true);
+        });
+    }
+
+    // Открывает popup по его ссылке/имени (пример: #good)
+    function openPopUp(name) {
+        var linkToPopup = document.createElement('a');
+        linkToPopup.setAttribute('href', `#${name}`);
+        linkToPopup.style.display = 'none';
+        document.querySelector('.r').appendChild(linkToPopup);
+
+        t_onReady(function () {
+            t_onFuncLoad('t_popup__showPopup', function () {
+                linkToPopup.click();
+            });
+        });
+    }
+
+    // Закрывает popup, если найдет открытый popup на странице
+    function closePopUp() {
+        const popUpOpn = document.querySelector('.t-popup_show');
+        if (popUpOpn) { popUpOpn.click(); }
+    }
+
+    // Формируем данные для заказа для страницые товара
+    function createOrder(name, phone) {
+        const kit = getKit();
+
+        // Формируем дополнительный параметр источника для лучшей читабельности в сообщении telegram
+        const sourceDescription = sourceFB
+            ? ' (Facebook)'
+            : sourceTT
+            ? ' (TikTok)'
+            : '';
+
+        // Формируем общий объект с данными заказа
+        const data = {
+            originlURL: String(originlURL),
+            source: String(utmSource),
+            sourceDescription: String(sourceDescription),
+            eventID: String(eventID.slice(-7)),
+            product: String(nameOfProduct),
+            image: String(srcImg),
+            name: String(name),
+            phone: String(phone),
+            messageDescription: String(messageDescription),
+            count: String(kit.pack),
+            price: String(kit.price),
+        };
+
+        const message = createMessage(data);
+
+        return { data, message };
+    }
+
+    // Формируем сообщение для telegram
+    function createMessage(data, resend = false) {
+        let message = resend ? `<b>ИЗМЕНЕНИЕ В ЗАЯВКЕ!</b>\n` : '';
+        message += `<b>Фото: ${data.image}</b>\n`;
+        message += `<b>Ссылка: ${data.originlURL}</b>\n`;
+        message += `<b>Источник: ${data.source}${data.sourceDescription}</b>\n`;
+        message += `<b>ID клиента: ${data.eventID}</b>\n`;
+        message += `<b>Товара: ${data.product}</b>\n`;
+        message += `<b>Имя клиента: ${data.name}</b>\n`;
+        message += `<b>Телефон: ${data.phone}</b>\n`;
+        message += `<b>${data.messageDescription}: ${data.count}</b>\n`;
+        message += `<b>Цена: ${data.price} руб.</b>\n`;
+        
+        return message;
+    }
+
+    function getKit() {
+        // Достаем значения из варианта комплектации товара
+        const complectVariants = document.querySelectorAll('.complect-variant');
+        let selectedVariant = null;
+        complectVariants.forEach(function (complectVariant) {
+            if (complectVariant.classList.contains('active')) {
+                selectedVariant = complectVariant;
+            }
+        });
+        const pack = selectedVariant.getAttribute('pack');
+        const price = selectedVariant.getAttribute('price');
+
+        return { pack: parseInt(pack), price: parseFloat(price) }
+    }
+</script>

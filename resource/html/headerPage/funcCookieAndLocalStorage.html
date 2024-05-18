@@ -1,5 +1,7 @@
 <!--
-    Функции для работы с Cookie
+    funcCookieAndLocalStorage.html
+    
+    Функции для работы с Cookie и localStorage
 -->
 
 <script>
@@ -17,7 +19,13 @@
 
     function setCookieEventID() {
         const _eventID = window.getUUIDv4();
-        setCookie('_eventID', _eventID, 60 * 24 * 60);
+        setCookie('_plEventID', _eventID, 90 * 24 * 60);
+        return _eventID;
+    }
+
+    function setCookieExternaID() {
+        const _eventID = window.getUUIDv4();
+        setCookie('_plExternaID', _eventID, 90 * 24 * 60);
         return _eventID;
     }
 
@@ -28,5 +36,22 @@
         );
         var expires = 'expires=' + expirationDate.toUTCString();
         document.cookie = `${name}=${value}; ${expires}; path=/`;
+    }
+
+    function setLocalStoregeJSON(key, model) {
+        localStorage.setItem(key, JSON.stringify(model));
+    }
+
+    function setLocalStorege(key, value) {
+        localStorage.setItem(key, value);
+    }
+
+    function getLocalStoregeJSON(key) {
+        const model = localStorage.getItem(key);
+        return JSON.parse(model);
+    }
+
+    function getLocalStorege(key) {
+        return localStorage.getItem(key);
     }
 </script>

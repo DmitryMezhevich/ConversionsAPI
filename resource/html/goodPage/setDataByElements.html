@@ -1,0 +1,58 @@
+<!--
+    setDataByElements.html
+
+    Здесь при загрузке страницы благодарности устанавливается
+    значение имени и телефона, настраивается popup для изменения 
+    данных клиента
+-->
+
+<script>
+    const client = {
+        name: null,
+        phone: null,
+        buttonChange: null,
+    }
+
+    // ------------------- getElements() and setDataByElements() -------------------
+    function getElements() {
+        const elements = document.querySelectorAll('.tn-atom');
+        elements.forEach(function (element) {
+            if (element.textContent.includes('name_')) {
+                client.name = element;
+            }
+            if (element.textContent.includes('phone_')) {
+                client.phone = element;
+            }
+        });
+
+        client.namePopup = document.querySelectorAll('.tn-atom');
+        elements.forEach(function (element) {
+            if (element.textContent.includes('Изменить')) {
+                client.buttonChange = element;
+            }
+        });
+    }
+
+    function setDataByElements() {
+        const data = getLocalStoregeJSON('_clientData');
+
+        const nameContent = `<span style="font-weight: 700;">${data.name}</span>`;
+        const phoneContent = `<span style="font-weight: 700;">${data.phone}</span>`;
+        client.name.innerHTML = nameContent;
+        client.phone.innerHTML = phoneContent;
+
+        client.buttonChange.addEventListener('click', () => {
+            document.querySelector('input[name="name"]').value = data.name;
+            document.querySelector('input[name="phone"]').value = data.phone;
+
+            const element = document.querySelector('form button');
+            element.addEventListener('click', () => {
+                const removeElemet = document.querySelector('form .js-successbox');
+                if (removeElemet) { removeElemet.remove() }
+                setTimeout(() => {
+                    document.querySelector('form').classList.remove('js-send-form-success');
+                }, 2000);
+            });
+        });
+    }
+</script>

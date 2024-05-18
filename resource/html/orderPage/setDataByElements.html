@@ -1,0 +1,94 @@
+<!--
+    setDataByElements.html
+    
+    Здесь при загрузке страницы с товаром устанавливается
+    значение конфигурации товара, а также устанавливаются счетчики для сайта
+-->
+
+<script>
+    // ------------------- Получаем необходимые элементы, затем устанавливаем значения -------------------
+    function getElements() {
+        const elements = document.querySelectorAll('.tn-atom');
+        elements.forEach(function (element) {
+            if (element.textContent.includes('с 1 декабря')) {
+                !dateSaleElements.first ? dateSaleElements.first = element : dateSaleElements.second = element;
+            }
+            if (element.textContent.includes('1010 человек уже')) {
+                !totalPayElements.first ? totalPayElements.first = element : totalPayElements.second = element;
+            }
+            if (element.textContent.includes('25 штук по акции')) {
+                !goodsCountElements.first ? goodsCountElements.first = element : goodsCountElements.second = element;
+            }
+            if (element.textContent.includes('33,33 BYN')) {
+                !offerElements.first.oldPrice ? offerElements.first.oldPrice = element : offerElements.second.oldPrice = element;
+            }
+            if (element.textContent.includes('-97%')) {
+                !offerElements.first.sale ? offerElements.first.sale = element : offerElements.second.sale = element;
+            }
+            if (element.textContent.includes('11,11 BYN')) {
+                !offerElements.first.newPrice ? offerElements.first.newPrice = element : offerElements.second.newPrice = element;
+            }
+        });
+    }
+
+    function setDataByElements() {
+        setDataByOffer();
+        setDateSale();
+        setGoodsCount();
+        setTotalPay();
+    }
+
+    // ------------------- Установка цены и процента акции -------------------
+    function setDataByOffer() {
+        const oldPriceContent = `
+                                    <span style="font-weight: 700; text-decoration: line-through;">
+                                    ${variants[0].oldPrice} BYN
+                                    </span>
+                                `;
+        const saleContent =     `
+                                    <span style="font-weight: 700; color: #ff0000;">
+                                    ${sale}
+                                    </span>
+                                `;
+        const newPriceContent = `
+                                    <span style="font-weight: 700; color: #ffffff;">
+                                    ${variants[0].newPrice} BYN
+                                    </span>
+                                `;
+        offerElements.first.oldPrice.innerHTML = oldPriceContent;
+        offerElements.second.oldPrice.innerHTML = oldPriceContent;
+        offerElements.first.sale.innerHTML = saleContent;
+        offerElements.second.sale.innerHTML = saleContent;
+        offerElements.first.newPrice.innerHTML = newPriceContent;
+        offerElements.second.newPrice.innerHTML = newPriceContent;
+    }
+    
+    // ------------------- Установка даты начала и конца акции -------------------
+    function setDateSale() {
+        const date = getDateSaleStr(2);
+        const content = `
+                            <span style="font-weight: 700;">
+                            Акция действует с <span style="color: #e62e04">
+                            ${date.old}</span><br> по <span style="color:
+                            #e62e04">${date.new}</span> на всей территории
+                            <br>Республики Беларусь
+                            </span>
+                        `;
+        dateSaleElements.first.innerHTML = content;
+        dateSaleElements.second.innerHTML = content;
+    }
+
+    // ------------------- Установка счетчика оставшегося товар -------------------
+    function setGoodsCount() {
+        const goodsCounter = parseInt(getCookie(`goodsCounter${window.location.pathname}`));
+        goodsCounter ? setCount(goodsCounter) : setCount(25);
+    }
+
+    // ------------------- Установка счетчика общего числа покупок -------------------
+    function setTotalPay() {
+        const totalPay = parseInt(getCookie(`totalPay${window.location.pathname}`));
+        totalPay
+            ? setTotal(totalPay)
+            : setTotal(rundomNumber(1_600, 900));
+    }
+</script>

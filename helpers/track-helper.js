@@ -17,9 +17,15 @@ class TrackHelper {
                 headers['x-forwarded-for']?.split(',')[0].trim()
             )
             .setClientUserAgent(headers['user-agent'])
-            .setFbp(model.fbp)
-            .setFbc(model.fbc)
-            .setExternalId(model.eventID);
+            .setExternalId(model.externalID);
+
+        if (model.fbp) {
+            userData.setFbp(model.fbp);
+        }
+
+        if (model.fbc) {
+            userData.setFbc(model.fbc);
+        }
 
         const serverEvent = new ServerEvent()
             .setEventName(model.eventName)
@@ -31,8 +37,8 @@ class TrackHelper {
 
         if (model.eventName === 'Purchase') {
             const customData = new CustomData()
-                .setCurrency('usd')
-                .setValue(0.0);
+                .setCurrency(model.currency)
+                .setValue(model.value);
 
             serverEvent.setCustomData(customData);
 
@@ -41,7 +47,7 @@ class TrackHelper {
                 userData.setPhone(_phone);
             }
 
-            if (!model.name && model.name.length > 0) {
+            if (model.name && model.name.length > 0) {
                 userData.setFirstName(
                     cyrillicToTranslit().transform(model.name)
                 );
@@ -51,7 +57,7 @@ class TrackHelper {
         const eventsData = [serverEvent];
         const eventRequest = new EventRequest(
             accessToken,
-            model.fbPixelID
+            model.pixelID
         ).setEvents(eventsData);
 
         if (model.testEventCode) {

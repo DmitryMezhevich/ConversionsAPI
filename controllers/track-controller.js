@@ -1,15 +1,40 @@
 const axios = require('axios');
 const fs = require('fs').promises;
+const logger = require('../logger');
 
 const sqlRequest = require('../db/requestSQL-helper');
 const trackHelper = require('../helpers/track-helper');
 const TTModel = require('../models/ttModel');
+const PageViewModel = require('../models/pageViewModel');
+
+
+const TOKEN = '7103187943:AAHnjOz6PXNLDTVXZhmwcoTS-hWdaSLvUK8';
+const CHAT_ID = '-1002076177922';
+const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
 class TarckController {
+
+    // Отправляем события просмотра в телеграм
+    async event(req, res, next) {
+        try {
+            const body = req.body;
+            body.req = req;
+            const pageViewModel = new PageViewModel(body);
+            await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
+
+            logger.info(`Отправили event`);
+            res.status(200).json({ status: 'Ok' });
+        } catch (err) {
+            logger.error(`Ошибка event ${err.message}`);
+            res.status(500).json({ err: err.message });
+        }
+    }
+
+    // Отправляем события в CAPI Facebook и в телеграм(событие просмотра)
     async eventFB(req, res, next) {
         try {
             const accessToken = await sqlRequest.getAccessTokenFB(
-                req.body.fbPixelID
+                req.body.pixelID
             );
 
             const eventRequest = trackHelper.createFBEvent(
@@ -20,17 +45,31 @@ class TarckController {
 
             await eventRequest.execute();
 
-            res.status(200).json({ status: 'Ok' });
         } catch (err) {
-            console.log(err.message);
+            logger.error(`Ошибка eventFB: ${err.message}`);
             res.status(500).json({ err: err.message });
+        } finally {
+            try {
+                if (req.body.eventName === 'PageView') {
+                    const body = req.body;
+                    body.req = req;
+                    const pageViewModel = new PageViewModel(body);
+                    await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
+                }
+
+                logger.info(`Отправили eventFB ${req.body.eventName}`);
+                next();
+            } catch (err) {
+                logger.error(`Ошибка eventFB telegram: ${err.message}`);
+            }
         }
     }
 
+    // Отправляем события в CAPI TikTok и в телеграм(событие просмотра)
     async eventTT(req, res, next) {
         try {
             const accessToken = await sqlRequest.getAccessTokenTT(
-                req.body.ttPixelID
+                req.body.pixelID
             );
 
             const model = req.body;
@@ -49,13 +88,28 @@ class TarckController {
                 }
             );
 
-            res.status(200).json({ status: 'Ok' });
+            res.status(200).json({ status: "ok"});
         } catch (err) {
-            console.log(err.message);
+            logger.error(`Ошибка eventTT: ${err.message}`);
             res.status(500).json({ err: err.message });
+        } finally {
+            try {
+                if (req.body.eventName === 'Pageview') {
+                    const body = req.body;
+                    body.req = req;
+                    const pageViewModel = new PageViewModel(body);
+                    await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
+                }
+
+                logger.info(`Отправили eventTT ${req.body.eventName}`);
+                next();
+            } catch (err) {
+                logger.error(`Ошибка eventTT telegram: ${err.message}`);
+            }
         }
     }
 
+    // Записываем в SQL данные о Pixel
     async addDataPixel(req, res, next) {
         try {
             if (req.body.typePixel === 'Facebook') {
@@ -72,7 +126,6 @@ class TarckController {
 
             res.status(200).json({ status: 'Ok' });
         } catch (err) {
-            console.log(err.message);
             res.status(500).json({ err: err.message });
         }
     }
@@ -91,18 +144,26 @@ class TarckController {
             res.writeHead(200, { 'Content-Type': 'application/javascript' });
             res.end(content, 'utf-8');
         } catch (err) {
-            console.log(err.message);
             res.status(500).json({ err: err.message });
         }
     }
 
-    async test(req, res, next) {
+    async myTestGood(req, res, next) {
         try {
             setTimeout(() => {
-                res.status(500).json({ err: err.message });
-            }, 3000);
+                res.status(200).json({ status: "ok" });
+            }, 1000);
         } catch (err) {
-            console.log(err.message);
+            res.status(500).json({ err: err.message });
+        }
+    }
+
+    async myTestErr(req, res, next) {
+        try {
+            setTimeout(() => {
+                res.status(500).json({ status: "err" });
+            }, 1000);
+        } catch (err) {
             res.status(500).json({ err: err.message });
         }
     }

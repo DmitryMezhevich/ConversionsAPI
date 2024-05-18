@@ -1,4 +1,6 @@
 <!-- 
+    start.html
+    
     Импортируем axios
     Импортируем uuid
     Запрещаем автоотправку с формы
@@ -24,9 +26,8 @@
 <script>
     const url = new URL(window.location.href);
     const params = url.searchParams;
-
-    const sourceFB = params.has('fbclid');
-    const sourceTT = params.has('ttclid') || params.has('tt_test_id');
+    const sourceFB = params.has('fbclid') && fbPixelID.length > 0;
+    const sourceTT = (params.has('ttclid') || params.has('tt_test_id')) && ttPixelID.length > 0;
     const utmSource = params.has('utm_source')
         ? params.get('utm_source')
         : 'отсутствует';

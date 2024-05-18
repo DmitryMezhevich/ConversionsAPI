@@ -1,0 +1,88 @@
+<!--
+    events.html
+    
+    Трекеры для создания ивентов и их отправки напрямую и в Event API
+-->
+
+<script>    
+    // По завершению загрузки страницы формируем EventID и вызываем ивент PageView
+    window.addEventListener('load', function () {
+
+        eventID = eventID ? eventID : getCookie('_plEventID');
+        if (eventID === null) {
+            eventID = setCookieEventID();
+        }
+        externalID = externalID ? externalID : getCookie('_plExternaID');
+        if (externalID === null) {
+            externalID = setCookieExternaID();
+        }
+
+        if (sourceFB) {
+            sendEventToFB(true);
+        } else if (sourceTT) {
+            sendEventToTT(true);
+        } else if (!window.location.href.includes('good')) {
+            sendEventPageViewEmpty();
+        }
+        
+        // Добавляем действие на кнопку в popup при не удачном закезе
+        addListenerResendOrder()
+        // Убираем отображение showSuccessPopupForm
+        window.tildaForm.showSuccessPopup = () => {};
+    });
+
+    // По нажатию кнопки на форме вытаскиваем значение имени и телефона
+    // вызываем ивент покупки и отправляем заявку в telegram
+    function t396_onSuccess(form) {
+        // Достаем значения из формы
+        if (!form) return;
+
+        // Открываем окно с ожиданием и закрываем стандартный PopUp формы
+        openPopUp('loading');
+
+        if (form instanceof jQuery) {
+            form = form.get(0);
+        }
+
+        const obj = {};
+        const inputs = form.elements;
+        Array.prototype.forEach.call(inputs, function (input) {
+            obj[input.name] = input.value;
+        });
+
+        // В если мы на good page, тогда отправляем простой запрос
+        if (!window.location.href.includes('good')) {
+            // Формируем данные для заказа
+            const order = createOrder(obj['name'], obj['phone']);
+
+            // Записываем data и message в localStorage
+            setLocalStoregeJSON('_clientData', order.data);
+            setLocalStorege('_clientMessage', order.message);
+
+            // Отправляем события в Pixel
+            if (sourceFB) {
+                sendEventToFB(false, order.data.name, order.data.phone);
+            } else if (sourceTT) {
+                sendEventToTT(false, order.data.phone);
+            }
+
+            // Отправка в telegram
+            sendOrder();
+        } else {
+            // Достаем данные из localStorage
+            const data = getLocalStoregeJSON('_clientData');
+            data.name = String(obj['name']);
+            data.phone = String(obj['phone']);
+
+            // Формируем сообщение для telegram
+            const message = createMessage(data, true);
+
+            // Отправка в telegram
+            sendOrder(true, message, () => {
+                // Записываем data и message в localStorage
+                setLocalStoregeJSON('_clientData', data);
+                setLocalStorege('_clientMessage', message);
+            });
+        }
+    }
+</script>

@@ -6,11 +6,16 @@
 
     const ttPixelID = '';
     const testEventCodeTT = null; // default - null
+    const contentID = '' // Формируем сами UUID для каждого нового товара
 
     let eventID = null; // default - null, для тестов можно указывать свой ID
+    let externalID = null; // default - null, для тестов можно указывать свой ID
+
+    const exchangeUSD = 3.2163; // Курс валют USD
 
     // Описание товара и цены
     const nameOfProduct = 'Паровая щетка для животных';
+    const sale = '43%'
     const srcImg =
         'https://optim.tildacdn.biz/tild3034-3335-4561-b338-383539333336/-/resize/384x/-/format/webp/offer.png';
     const variants = [
@@ -18,25 +23,29 @@
             pack: '1',
             headers: 'Самый популярный',
             description: '1 щетка',
-            sale: 'Скидка -43%',
-            salePrice: '19.99',
-            price: '35.10',
+            sale: `Скидка ${sale}`,
+            newPrice: '19.99',
+            oldPrice: '35.10',
         },
         {
             pack: '2',
             headers: 'Самый выгодный',
-            description: '2 щетка',
+            description: '2 щетки',
             sale: 'Скидка -50%',
-            salePrice: '35.99',
-            price: '70.20',
+            newPrice: '35.99',
+            oldPrice: '70.20',
         },
     ];
 
     // Паремтры telegram
     const messageDescription = 'Количество'; // Подставляется в сообщении telegram (Пример: "Количество: 2" или "Длина: 15" и т.п.)
     const srcThenksPage = 'https://planetshop.by/good'; // Адрес страницы благодарности
-    const TOKEN = '5999844731:AAHdjkC06i3wNPmRnOjehw9QbQ0U8gs13-I';
-    const CHAT_ID = '-1001646373201';
+    const TOKEN = '7101588256:AAEOkUlG5cDWqg9NwD_b11CxMMml25KorZw';
+    const CHAT_ID = '-1002069590673';
     const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+    // const URI_API = `https://api-planetshop.online/eventManager/testGood`;
+    // const URI_API = `https://api-planetshop.online/eventManager/testError`;
 </script>
 <!-- End General Data -->
+
+

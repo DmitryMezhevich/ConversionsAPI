@@ -1,5 +1,7 @@
 <!--
-    Код для выбора варианта комплекта товара
+    complectVariant.html
+    
+    Для выбора варианта комплекта товара. Устанавливается внутри элемента с формой на сайте
 -->
 
 <style>
@@ -177,7 +179,7 @@
 
     complectVariants.forEach((variant, index) => {
         variant.setAttribute('pack', variants[index].pack);
-        variant.setAttribute('price', variants[index].salePrice);
+        variant.setAttribute('price', variants[index].newPrice);
     });
 
     complectCaption.forEach((variant, index) => {
@@ -193,11 +195,11 @@
     });
 
     complectInfoPriceNewprice.forEach((variant, index) => {
-        variant.textContent = `${variants[index].salePrice} BYN`;
+        variant.textContent = `${variants[index].newPrice} BYN`;
     });
 
     complectInfoPriceOldprice.forEach((variant, index) => {
-        variant.textContent = `${variants[index].price} BYN`;
+        variant.textContent = `${variants[index].oldPrice} BYN`;
     });
 
     complectVariants.forEach(function (complectVariant) {

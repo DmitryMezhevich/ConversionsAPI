@@ -1,0 +1,139 @@
+<!--
+    funcEventsPixel.html
+    
+    Функции для отправки событий в Pixel, как напрямую, так и через Events API
+-->
+
+<script>
+    function sendEventToFB(firstLoad, name = null, phone = null) {
+        const eventName = phone ? 'Purchase' : 'PageView';
+
+        let customData = {};
+        if (eventName === 'Purchase') {
+            const { price } = getKit();
+            const priceUSD = (price / exchangeUSD).toFixed(2);
+            customData = { value: priceUSD, currency: 'USD' };
+        }
+
+        if (firstLoad) { 
+            fbq('init', fbPixelID, {external_id: externalID});
+            fbq.disablePushState = true; 
+        }
+
+        fbq('track', `${eventName}`, customData, {
+            eventID: eventID,
+        });
+
+        let requestAttempts = 0;
+        const checkInterval = setInterval(() => {
+                const _fbc = getCookie('_fbc');
+                const _fbp = getCookie('_fbp');
+                if (requestAttempts > 25 || (_fbc && _fbp)) {
+                    clearInterval(checkInterval);
+
+                    const eventModule = {
+                        pixelID: fbPixelID,
+                        externalID: externalID,
+                        eventName: eventName,
+                        eventSourceUrl: window.location.href,
+                        eventID: eventID,
+                        fbc: _fbc,
+                        fbp: _fbp,
+                        name: name,
+                        phone: phone,
+                        value: eventName === 'Purchase' ? customData.value : null,
+                        currency: eventName === 'Purchase' ? customData.currency : null,
+                        testEventCode: testEventCodeFB,
+                        nameOfProduct: nameOfProduct,
+                        chanel: utmSource,
+                    };
+
+                    sendEvent(
+                        `https://api-planetshop.online/eventManager/fb/event`,
+                        eventModule
+                    );
+                }
+                requestAttempts += 1;
+            }, 200);
+    }
+
+    function sendEventToTT(firstLoad, phone = null) {
+        const eventName = phone ? 'PlaceAnOrder' : 'Pageview';
+
+        if (firstLoad) {
+            ttq.load(ttPixelID);
+        }
+
+        let customData = {};
+        if (eventName === 'PlaceAnOrder') {
+            const { price } = getKit();
+            const priceUSD = (price / exchangeUSD).toFixed(2);
+            customData = {
+                contents: [
+                {
+                    content_id: contentID,
+                }],
+                content_type: 'product',
+                value: priceUSD,
+                currency: 'USD', 
+            };
+        }
+
+        const identify = { external_id: externalID };
+        const _phone = formatPhoneNumber(phone);
+        if (_phone) {
+            identify.phone_number = _phone;
+        }
+
+        ttq.identify(identify);
+        ttq.track(eventName, customData, { event_id: eventID });
+
+        let requestAttempts = 0;
+        const checkInterval = setInterval(() => {
+                const ttclid = getCookie('ttclid');
+                const fbp = getCookie('_ttp');
+                if (requestAttempts > 25 || (_fbc && _fbp)) {
+                    clearInterval(checkInterval);
+
+                    const eventModule = {
+                        pixelID: ttPixelID,
+                        externalID: externalID,
+                        eventName: eventName,
+                        eventSourceUrl: window.location.href,
+                        eventID: eventID,
+                        ttclid: ttclid,
+                        ttp: fbp,
+                        phone: _phone,
+                        value: eventName === 'PlaceAnOrder' ? customData.value : null,
+                        currency: eventName === 'PlaceAnOrder' ? customData.currency : null,
+                        contentID: eventName === 'PlaceAnOrder' ? contentID : null,
+                        testEventCode: testEventCodeTT,
+                        nameOfProduct: nameOfProduct,
+                        chanel: utmSource,
+                    };
+                    
+                    sendEvent(
+                        `https://api-planetshop.online/eventManager/tt/event`,
+                        eventModule
+                    );
+                }
+                requestAttempts += 1;
+            }, 200);
+    }
+
+    function sendEventPageViewEmpty() {
+        const eventModule = {
+            pixelID: '',
+            externalID: externalID,
+            eventID: eventID,
+            nameOfProduct: nameOfProduct,
+            chanel: utmSource,
+            eventSourceUrl: window.location.href,
+        };
+
+        sendEvent(
+            `https://api-planetshop.online/eventManager/event`,
+            eventModule
+        );
+    }
+</script>
