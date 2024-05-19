@@ -37,14 +37,14 @@ module.exports = class TTModel {
             this.data[0].user.phone = sha256(module.phone);
 
             this.data[0].properties = {
-                content_type : "product",
+                content_type: 'product',
                 currency: module.currency,
                 value: module.value,
                 contents: [
                     {
                         content_id: module.contentID,
-                    }
-                ]
+                    },
+                ],
             };
         }
         if (module.testEventCode) {

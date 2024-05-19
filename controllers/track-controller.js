@@ -7,13 +7,11 @@ const trackHelper = require('../helpers/track-helper');
 const TTModel = require('../models/ttModel');
 const PageViewModel = require('../models/pageViewModel');
 
-
 const TOKEN = '7103187943:AAHnjOz6PXNLDTVXZhmwcoTS-hWdaSLvUK8';
 const CHAT_ID = '-1002076177922';
 const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
 class TarckController {
-
     // Отправляем события просмотра в телеграм
     async event(req, res, next) {
         try {
@@ -22,10 +20,18 @@ class TarckController {
             const pageViewModel = new PageViewModel(body);
             await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
 
-            logger.info(`OK: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
+            logger.info(
+                `OK: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                    -7
+                )}`
+            );
             res.status(200).json({ status: 'Ok' });
         } catch (err) {
-            logger.error(`Error: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)} Message: ${err.message}`);
+            logger.error(
+                `Error: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                    -7
+                )} Message: ${err.message}`
+            );
             res.status(500).json({ err: err.message });
         }
     }
@@ -45,10 +51,18 @@ class TarckController {
 
             await eventRequest.execute();
 
-            logger.info(`OK: eventFB(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}`);
-            res.status(200).json({ status: "ok"});
+            logger.info(
+                `OK: eventFB(). Event: ${
+                    req.body.eventName
+                }. ID: ${req.body.eventID.slice(-7)}`
+            );
+            res.status(200).json({ status: 'ok' });
         } catch (err) {
-            logger.error(`Error: eventFB(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
+            logger.error(
+                `Error: eventFB(). Event: ${
+                    req.body.eventName
+                }. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`
+            );
             res.status(500).json({ err: err.message });
         } finally {
             try {
@@ -57,12 +71,20 @@ class TarckController {
                     body.req = req;
                     const pageViewModel = new PageViewModel(body);
                     await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
-                    logger.info(`OK: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
+                    logger.info(
+                        `OK: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                            -7
+                        )}`
+                    );
                 }
 
                 next();
             } catch (err) {
-                logger.error(`Error: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
+                logger.error(
+                    `Error: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                        -7
+                    )}. Message: ${err.message}`
+                );
             }
         }
     }
@@ -79,7 +101,6 @@ class TarckController {
 
             const ttModel = new TTModel(model);
 
-
             await axios.post(
                 'https://business-api.tiktok.com/open_api/v1.3/event/track/',
                 ttModel,
@@ -91,10 +112,18 @@ class TarckController {
                 }
             );
 
-            logger.info(`OK: eventTT(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}`);
-            res.status(200).json({ status: "ok"});
+            logger.info(
+                `OK: eventTT(). Event: ${
+                    req.body.eventName
+                }. ID: ${req.body.eventID.slice(-7)}`
+            );
+            res.status(200).json({ status: 'ok' });
         } catch (err) {
-            logger.error(`Error: eventTT(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
+            logger.error(
+                `Error: eventTT(). Event: ${
+                    req.body.eventName
+                }. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`
+            );
             res.status(500).json({ err: err.message });
         } finally {
             try {
@@ -103,12 +132,20 @@ class TarckController {
                     body.req = req;
                     const pageViewModel = new PageViewModel(body);
                     await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
-                    logger.info(`OK: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
+                    logger.info(
+                        `OK: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                            -7
+                        )}`
+                    );
                 }
 
                 next();
             } catch (err) {
-                logger.error(`Error: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
+                logger.error(
+                    `Error: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(
+                        -7
+                    )}. Message: ${err.message}`
+                );
             }
         }
     }
@@ -155,7 +192,7 @@ class TarckController {
     async myTestGood(req, res, next) {
         try {
             setTimeout(() => {
-                res.status(200).json({ status: "ok" });
+                res.status(200).json({ status: 'ok' });
             }, 1000);
         } catch (err) {
             res.status(500).json({ err: err.message });
@@ -165,7 +202,7 @@ class TarckController {
     async myTestErr(req, res, next) {
         try {
             setTimeout(() => {
-                res.status(500).json({ status: "err" });
+                res.status(500).json({ status: 'err' });
             }, 1000);
         } catch (err) {
             res.status(500).json({ err: err.message });

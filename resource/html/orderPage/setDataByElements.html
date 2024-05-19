@@ -11,22 +11,34 @@
         const elements = document.querySelectorAll('.tn-atom');
         elements.forEach(function (element) {
             if (element.textContent.includes('с 1 декабря')) {
-                !dateSaleElements.first ? dateSaleElements.first = element : dateSaleElements.second = element;
+                !dateSaleElements.first
+                    ? (dateSaleElements.first = element)
+                    : (dateSaleElements.second = element);
             }
             if (element.textContent.includes('1010 человек уже')) {
-                !totalPayElements.first ? totalPayElements.first = element : totalPayElements.second = element;
+                !totalPayElements.first
+                    ? (totalPayElements.first = element)
+                    : (totalPayElements.second = element);
             }
             if (element.textContent.includes('25 штук по акции')) {
-                !goodsCountElements.first ? goodsCountElements.first = element : goodsCountElements.second = element;
+                !goodsCountElements.first
+                    ? (goodsCountElements.first = element)
+                    : (goodsCountElements.second = element);
             }
             if (element.textContent.includes('33,33 BYN')) {
-                !offerElements.first.oldPrice ? offerElements.first.oldPrice = element : offerElements.second.oldPrice = element;
+                !offerElements.first.oldPrice
+                    ? (offerElements.first.oldPrice = element)
+                    : (offerElements.second.oldPrice = element);
             }
             if (element.textContent.includes('-97%')) {
-                !offerElements.first.sale ? offerElements.first.sale = element : offerElements.second.sale = element;
+                !offerElements.first.sale
+                    ? (offerElements.first.sale = element)
+                    : (offerElements.second.sale = element);
             }
             if (element.textContent.includes('11,11 BYN')) {
-                !offerElements.first.newPrice ? offerElements.first.newPrice = element : offerElements.second.newPrice = element;
+                !offerElements.first.newPrice
+                    ? (offerElements.first.newPrice = element)
+                    : (offerElements.second.newPrice = element);
             }
         });
     }
@@ -45,7 +57,7 @@
                                     ${variants[0].oldPrice} BYN
                                     </span>
                                 `;
-        const saleContent =     `
+        const saleContent = `
                                     <span style="font-weight: 700; color: #ff0000;">
                                     ${sale}
                                     </span>
@@ -62,7 +74,7 @@
         offerElements.first.newPrice.innerHTML = newPriceContent;
         offerElements.second.newPrice.innerHTML = newPriceContent;
     }
-    
+
     // ------------------- Установка даты начала и конца акции -------------------
     function setDateSale() {
         const date = getDateSaleStr(2);
@@ -80,15 +92,17 @@
 
     // ------------------- Установка счетчика оставшегося товар -------------------
     function setGoodsCount() {
-        const goodsCounter = parseInt(getCookie(`goodsCounter${window.location.pathname}`));
+        const goodsCounter = parseInt(
+            getCookie(`goodsCounter${window.location.pathname}`)
+        );
         goodsCounter ? setCount(goodsCounter) : setCount(25);
     }
 
     // ------------------- Установка счетчика общего числа покупок -------------------
     function setTotalPay() {
-        const totalPay = parseInt(getCookie(`totalPay${window.location.pathname}`));
-        totalPay
-            ? setTotal(totalPay)
-            : setTotal(rundomNumber(1_600, 900));
+        const totalPay = parseInt(
+            getCookie(`totalPay${window.location.pathname}`)
+        );
+        totalPay ? setTotal(totalPay) : setTotal(rundomNumber(1_600, 900));
     }
 </script>

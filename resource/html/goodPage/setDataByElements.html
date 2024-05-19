@@ -11,7 +11,7 @@
         name: null,
         phone: null,
         buttonChange: null,
-    }
+    };
 
     // ------------------- getElements() and setDataByElements() -------------------
     function getElements() {
@@ -47,10 +47,16 @@
 
             const element = document.querySelector('form button');
             element.addEventListener('click', () => {
-                const removeElemet = document.querySelector('form .js-successbox');
-                if (removeElemet) { removeElemet.remove() }
+                const removeElemet = document.querySelector(
+                    'form .js-successbox'
+                );
+                if (removeElemet) {
+                    removeElemet.remove();
+                }
                 setTimeout(() => {
-                    document.querySelector('form').classList.remove('js-send-form-success');
+                    document
+                        .querySelector('form')
+                        .classList.remove('js-send-form-success');
                 }, 2000);
             });
         });

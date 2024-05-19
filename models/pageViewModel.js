@@ -64,12 +64,11 @@ module.exports = class PageViewModel {
     }
 
     async sendPageViewEvent(URI_API, CHAT_ID) {
-        this.createMessage()
-        await axios
-                .post(URI_API, {
-                    chat_id: CHAT_ID,
-                    parse_mode: 'html',
-                    text: this.message,
-                });
+        this.createMessage();
+        await axios.post(URI_API, {
+            chat_id: CHAT_ID,
+            parse_mode: 'html',
+            text: this.message,
+        });
     }
 };

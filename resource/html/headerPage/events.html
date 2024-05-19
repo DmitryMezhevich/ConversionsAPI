@@ -4,10 +4,9 @@
     Трекеры для создания ивентов и их отправки напрямую и в Event API
 -->
 
-<script>    
+<script>
     // По завершению загрузки страницы формируем EventID и вызываем ивент PageView
     window.addEventListener('load', function () {
-
         eventID = eventID ? eventID : getCookie('_plEventID');
         if (eventID === null) {
             eventID = setCookieEventID();
@@ -24,9 +23,9 @@
         } else if (!window.location.href.includes('good')) {
             sendEventPageViewEmpty();
         }
-        
+
         // Добавляем действие на кнопку в popup при не удачном закезе
-        addListenerResendOrder()
+        addListenerResendOrder();
         // Убираем отображение showSuccessPopupForm
         window.tildaForm.showSuccessPopup = () => {};
     });
@@ -72,12 +71,11 @@
             const message = createMessage(data, true);
             orderResend = {
                 data: data,
-                message: message
+                message: message,
             };
 
             // Отправка в telegram
             sendOrder(true);
         }
     }
-
 </script>

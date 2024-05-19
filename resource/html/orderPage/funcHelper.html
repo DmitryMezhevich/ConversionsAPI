@@ -18,11 +18,11 @@
             sale: null,
             oldPrice: null,
         },
-    }
+    };
     const dateSaleElements = {
         first: null,
         second: null,
-    }
+    };
     const goodsCountElements = {
         first: null,
         second: null,
@@ -74,7 +74,11 @@
         setTimeout(() => {
             if (goodsCounter > 2) {
                 goodsCounter -= 1;
-                setCookie(`goodsCounter${window.location.pathname}`, goodsCounter, 5 * 24 * 60);
+                setCookie(
+                    `goodsCounter${window.location.pathname}`,
+                    goodsCounter,
+                    5 * 24 * 60
+                );
                 setCount(goodsCounter);
             }
         }, rundomNumber(7_000, 3_000));
@@ -90,7 +94,11 @@
                         `;
         totalPayElements.first.innerHTML = content;
         totalPayElements.second.innerHTML = content;
-        setCookie(`totalPay${window.location.pathname}`, totalCounter, 5 * 24 * 60);
+        setCookie(
+            `totalPay${window.location.pathname}`,
+            totalCounter,
+            5 * 24 * 60
+        );
 
         setTimeout(() => {
             setTotal(totalCounter);

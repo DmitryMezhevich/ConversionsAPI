@@ -30,9 +30,13 @@
             openPopUp('loading');
         }
 
-        const data = orderResend ? orderResend.data : getLocalStoregeJSON('_clientData');
-        const message = orderResend ? orderResend.message : getLocalStorege('_clientMessage');
-        
+        const data = orderResend
+            ? orderResend.data
+            : getLocalStoregeJSON('_clientData');
+        const message = orderResend
+            ? orderResend.message
+            : getLocalStorege('_clientMessage');
+
         axios
             .post(URI_API, {
                 chat_id: CHAT_ID,
@@ -54,7 +58,7 @@
                         sendEventToTT(false, data.phone, () => {
                             window.location.href = srcThenksPage;
                         });
-                    } 
+                    }
                 } else {
                     window.location.href = srcThenksPage;
                 }
@@ -65,16 +69,16 @@
                     if (sourceFB) {
                         sendEventToFB(false, data.name, data.phone, () => {
                             setTimeout(() => {
-                            closePopUp();
-                            openPopUp('error');
-                        }, 1000);
+                                closePopUp();
+                                openPopUp('error');
+                            }, 1000);
                         });
                     } else if (sourceTT) {
                         sendEventToTT(false, data.phone, () => {
                             setTimeout(() => {
-                            closePopUp();
-                            openPopUp('error');
-                        }, 1000);
+                                closePopUp();
+                                openPopUp('error');
+                            }, 1000);
                         });
                     }
                 } else {
@@ -85,7 +89,7 @@
                 }
             });
     }
-    
+
     // Форматирование номера для TikTok Pixel
     function formatPhoneNumber(phoneNumber) {
         if (!phoneNumber) {
@@ -116,7 +120,9 @@
     // Ставим обработчик на клик кнопки popup (если отправка сообщения с заказом прошла не успешно) для повторной попытке отправки
     // Чтобы найти эту кнопку, нужно указывать, в каком конкретно блоке искать (указываем id, пример: #rec747752787)
     function addListenerResendOrder() {
-        const button = document.querySelector('#rec748246272 [data-elem-type="button"]');
+        const button = document.querySelector(
+            '#rec748246272 [data-elem-type="button"]'
+        );
         button.addEventListener('click', function () {
             sendOrder(true);
         });
@@ -139,7 +145,9 @@
     // Закрывает popup, если найдет открытый popup на странице
     function closePopUp() {
         const popUpOpn = document.querySelector('.t-popup_show');
-        if (popUpOpn) { popUpOpn.click(); }
+        if (popUpOpn) {
+            popUpOpn.click();
+        }
     }
 
     // Формируем данные для заказа для страницые товара
@@ -185,7 +193,7 @@
         message += `<b>Телефон: ${data.phone}</b>\n`;
         message += `<b>${data.messageDescription}: ${data.count}</b>\n`;
         message += `<b>Цена: ${data.price} руб.</b>\n`;
-        
+
         return message;
     }
 
@@ -201,6 +209,6 @@
         const pack = selectedVariant.getAttribute('pack');
         const price = selectedVariant.getAttribute('price');
 
-        return { pack: parseInt(pack), price: parseFloat(price) }
+        return { pack: parseInt(pack), price: parseFloat(price) };
     }
 </script>
