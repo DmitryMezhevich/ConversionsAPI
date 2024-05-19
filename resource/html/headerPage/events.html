@@ -60,7 +60,7 @@
             setLocalStorege('_clientMessage', order.message);
 
             // Отправка в telegram
-            sendOrder(false, true);
+            sendOrder(false);
         } else {
             // Достаем данные из localStorage
             const data = getLocalStoregeJSON('_clientData');
