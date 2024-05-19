@@ -22,10 +22,10 @@ class TarckController {
             const pageViewModel = new PageViewModel(body);
             await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
 
-            logger.info(`Отправили event`);
+            logger.info(`OK: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
             res.status(200).json({ status: 'Ok' });
         } catch (err) {
-            logger.error(`Ошибка event ${err.message}`);
+            logger.error(`Error: event(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)} Message: ${err.message}`);
             res.status(500).json({ err: err.message });
         }
     }
@@ -45,8 +45,10 @@ class TarckController {
 
             await eventRequest.execute();
 
+            logger.info(`OK: eventFB(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}`);
+            res.status(200).json({ status: "ok"});
         } catch (err) {
-            logger.error(`Ошибка eventFB: ${err.message}`);
+            logger.error(`Error: eventFB(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
             res.status(500).json({ err: err.message });
         } finally {
             try {
@@ -55,12 +57,12 @@ class TarckController {
                     body.req = req;
                     const pageViewModel = new PageViewModel(body);
                     await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
+                    logger.info(`OK: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
                 }
 
-                logger.info(`Отправили eventFB ${req.body.eventName}`);
                 next();
             } catch (err) {
-                logger.error(`Ошибка eventFB telegram: ${err.message}`);
+                logger.error(`Error: eventFB(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
             }
         }
     }
@@ -77,6 +79,7 @@ class TarckController {
 
             const ttModel = new TTModel(model);
 
+
             await axios.post(
                 'https://business-api.tiktok.com/open_api/v1.3/event/track/',
                 ttModel,
@@ -88,9 +91,10 @@ class TarckController {
                 }
             );
 
+            logger.info(`OK: eventTT(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}`);
             res.status(200).json({ status: "ok"});
         } catch (err) {
-            logger.error(`Ошибка eventTT: ${err.message}`);
+            logger.error(`Error: eventTT(). Event: ${req.body.eventName}. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
             res.status(500).json({ err: err.message });
         } finally {
             try {
@@ -99,12 +103,12 @@ class TarckController {
                     body.req = req;
                     const pageViewModel = new PageViewModel(body);
                     await pageViewModel.sendPageViewEvent(URI_API, CHAT_ID);
+                    logger.info(`OK: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}`);
                 }
 
-                logger.info(`Отправили eventTT ${req.body.eventName}`);
                 next();
             } catch (err) {
-                logger.error(`Ошибка eventTT telegram: ${err.message}`);
+                logger.error(`Error: eventTT(). Send to telegram PageView. ID: ${req.body.eventID.slice(-7)}. Message: ${err.message}`);
             }
         }
     }

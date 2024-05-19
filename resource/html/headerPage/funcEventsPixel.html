@@ -5,7 +5,7 @@
 -->
 
 <script>
-    function sendEventToFB(firstLoad, name = null, phone = null) {
+    function sendEventToFB(firstLoad, name = null, phone = null, callback = null) {
         const eventName = phone ? 'Purchase' : 'PageView';
 
         let customData = {};
@@ -50,14 +50,17 @@
 
                     sendEvent(
                         `https://api-planetshop.online/eventManager/fb/event`,
-                        eventModule
+                        eventModule,
+                        () => {
+                            if (callback) { callback() }
+                        }
                     );
                 }
                 requestAttempts += 1;
             }, 200);
     }
 
-    function sendEventToTT(firstLoad, phone = null) {
+    function sendEventToTT(firstLoad, phone = null, callback = null) {
         const eventName = phone ? 'PlaceAnOrder' : 'Pageview';
 
         if (firstLoad) {
@@ -91,8 +94,8 @@
         let requestAttempts = 0;
         const checkInterval = setInterval(() => {
                 const ttclid = getCookie('ttclid');
-                const fbp = getCookie('_ttp');
-                if (requestAttempts > 25 || (_fbc && _fbp)) {
+                const _ttp = getCookie('_ttp');
+                if (requestAttempts > 25 || (ttclid && _ttp)) {
                     clearInterval(checkInterval);
 
                     const eventModule = {
@@ -102,7 +105,7 @@
                         eventSourceUrl: window.location.href,
                         eventID: eventID,
                         ttclid: ttclid,
-                        ttp: fbp,
+                        ttp: _ttp,
                         phone: _phone,
                         value: eventName === 'PlaceAnOrder' ? customData.value : null,
                         currency: eventName === 'PlaceAnOrder' ? customData.currency : null,
@@ -114,7 +117,10 @@
                     
                     sendEvent(
                         `https://api-planetshop.online/eventManager/tt/event`,
-                        eventModule
+                        eventModule,
+                        () => {
+                            if (callback) { callback() }
+                        }
                     );
                 }
                 requestAttempts += 1;

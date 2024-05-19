@@ -31,6 +31,7 @@
         window.tildaForm.showSuccessPopup = () => {};
     });
 
+    let orderResend = null;
     // По нажатию кнопки на форме вытаскиваем значение имени и телефона
     // вызываем ивент покупки и отправляем заявку в telegram
     function t396_onSuccess(form) {
@@ -59,15 +60,8 @@
             setLocalStoregeJSON('_clientData', order.data);
             setLocalStorege('_clientMessage', order.message);
 
-            // Отправляем события в Pixel
-            if (sourceFB) {
-                sendEventToFB(false, order.data.name, order.data.phone);
-            } else if (sourceTT) {
-                sendEventToTT(false, order.data.phone);
-            }
-
             // Отправка в telegram
-            sendOrder();
+            sendOrder(false, true);
         } else {
             // Достаем данные из localStorage
             const data = getLocalStoregeJSON('_clientData');
@@ -76,13 +70,14 @@
 
             // Формируем сообщение для telegram
             const message = createMessage(data, true);
+            orderResend = {
+                data: data,
+                message: message
+            };
 
             // Отправка в telegram
-            sendOrder(true, message, () => {
-                // Записываем data и message в localStorage
-                setLocalStoregeJSON('_clientData', data);
-                setLocalStorege('_clientMessage', message);
-            });
+            sendOrder(true);
         }
     }
+
 </script>

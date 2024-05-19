@@ -11,14 +11,81 @@
 
 <script>
     // Отправка Event в Events API
-    function sendEvent(url, data) {
-        axios.post(url, data, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    function sendEvent(url, data, callback) {
+        axios
+            .post(url, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .finally(() => {
+                callback();
+            });
     }
 
+    // Отправка сообщения о заказе в telegram
+    function sendOrder(loadingPopUp = false, sendEvent = false) {
+        if (loadingPopUp) {
+            closePopUp();
+            openPopUp('loading');
+        }
+
+        const data = orderResend ? orderResend.data : getLocalStoregeJSON('_clientData');
+        const message = orderResend ? orderResend.message : getLocalStorege('_clientMessage');
+        
+        axios
+            .post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'html',
+                text: message,
+            })
+            .then(() => {
+                if (orderResend) {
+                    setLocalStoregeJSON('_clientData', orderResend.data);
+                    setLocalStorege('_clientMessage', orderResend.message);
+                }
+                // Отправляем события в Pixel
+                if (sendEvent) {
+                    if (sourceFB) {
+                        sendEventToFB(false, data.name, data.phone, () => {
+                            window.location.href = srcThenksPage;
+                        });
+                    } else if (sourceTT) {
+                        sendEventToTT(false, data.phone, () => {
+                            window.location.href = srcThenksPage;
+                        });
+                    } 
+                } else {
+                    window.location.href = srcThenksPage;
+                }
+            })
+            .catch(() => {
+                // Отправляем события в Pixel
+                if (sendEvent) {
+                    if (sourceFB) {
+                        sendEventToFB(false, data.name, data.phone, () => {
+                            setTimeout(() => {
+                            closePopUp();
+                            openPopUp('error');
+                        }, 1000);
+                        });
+                    } else if (sourceTT) {
+                        sendEventToTT(false, data.phone, () => {
+                            setTimeout(() => {
+                            closePopUp();
+                            openPopUp('error');
+                        }, 1000);
+                        });
+                    }
+                } else {
+                    setTimeout(() => {
+                        closePopUp();
+                        openPopUp('error');
+                    }, 1000);
+                }
+            });
+    }
+    
     // Форматирование номера для TikTok Pixel
     function formatPhoneNumber(phoneNumber) {
         if (!phoneNumber) {
@@ -44,32 +111,6 @@
         } else {
             return null;
         }
-    }
-
-    // Отправка сообщения о заказе в telegram
-    function sendOrder(loadingPopUp = false, message = null, callback = null) {
-        if (loadingPopUp) {
-            closePopUp();
-            openPopUp('loading');
-        }
-
-        const _message = message ? message : getLocalStorege('_clientMessage');
-        
-        axios
-            .post(URI_API, {
-                chat_id: CHAT_ID,
-                parse_mode: 'html',
-                text: _message,
-            })
-            .then(() => {
-                if (callback) { callback() }
-                closePopUp();
-                window.location.href = srcThenksPage;
-            })
-            .catch(() => {
-                closePopUp();
-                openPopUp('error');
-            });
     }
 
     // Ставим обработчик на клик кнопки popup (если отправка сообщения с заказом прошла не успешно) для повторной попытке отправки
