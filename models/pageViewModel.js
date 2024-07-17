@@ -10,7 +10,7 @@ module.exports = class PageViewModel {
     message = null;
 
     constructor(model) {
-        this.time = moment().tz('Etc/GMT+3').format('HH:mm DD.MM.YYYY');
+        this.time = moment().format('HH:mm DD.MM.YYYY');
         this.nameOfProduct = model.nameOfProduct;
 
         const parsedUrl = url.parse(model.eventSourceUrl);
@@ -56,7 +56,7 @@ module.exports = class PageViewModel {
 
         message += `<b>ГЕО: </b>\n`;
         message += `\t IP: ${this.geo.ip}\n`;
-        message += `\t Строна: ${this.geo.country}\n`;
+        message += `\t Страна: ${this.geo.country}\n`;
         message += `\t Город: ${this.geo.city}\n`;
         message += `\t Координаты: ${this.geo.ll}`;
 
@@ -64,11 +64,13 @@ module.exports = class PageViewModel {
     }
 
     async sendPageViewEvent(URI_API, CHAT_ID) {
-        this.createMessage();
-        await axios.post(URI_API, {
-            chat_id: CHAT_ID,
-            parse_mode: 'html',
-            text: this.message,
-        });
+        if (this.geo.country === 'BY') {
+            this.createMessage();
+            await axios.post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'html',
+                text: this.message,
+            });
+        }
     }
 };
