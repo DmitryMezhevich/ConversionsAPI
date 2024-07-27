@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const moment = require('moment');
 const sha256 = require('js-sha256');
 
 module.exports = class TTModel {
@@ -11,7 +11,7 @@ module.exports = class TTModel {
         this.data = [
             {
                 event: module.eventName,
-                event_time: moment().tz('Etc/GMT+3').unix(),
+                event_time: moment().unix(),
                 event_id: module.eventID,
                 user: {
                     external_id: sha256(module.externalID),

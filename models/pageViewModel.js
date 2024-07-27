@@ -1,6 +1,6 @@
 const url = require('url');
 const axios = require('axios');
-const moment = require('moment-timezone');
+const moment = require('moment');
 var geoip = require('geoip-lite');
 
 module.exports = class PageViewModel {

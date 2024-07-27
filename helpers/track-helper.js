@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const moment = require('moment');
 const bizSdk = require('facebook-nodejs-business-sdk');
 const cyrillicToTranslit = require('cyrillic-to-translit-js');
 
@@ -10,7 +10,7 @@ const ServerEvent = bizSdk.ServerEvent;
 class TrackHelper {
     createFBEvent(headers, model, accessToken) {
         bizSdk.FacebookAdsApi.init(accessToken);
-        let currentTimestamp = moment().tz('Etc/GMT+3').unix();
+        let currentTimestamp = moment().unix();
 
         const userData = new UserData()
             .setClientIpAddress(
