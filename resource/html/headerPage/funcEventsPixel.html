@@ -102,7 +102,9 @@
 
         let requestAttempts = 0;
         const checkInterval = setInterval(() => {
-            const ttclid = getCookie('ttclid');
+            const ttclid = params.has('ttclid')
+                ? params.get('ttclid')
+                : getCookie('ttclid');
             const _ttp = getCookie('_ttp');
             if (requestAttempts > 25 || (ttclid && _ttp)) {
                 clearInterval(checkInterval);
